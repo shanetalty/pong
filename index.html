@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pong Game</title>
+  <style>
+    #game-area {
+      width: 800px;
+      height: 400px;
+      background-color: black;
+      position: relative;
+    }
+    .paddle {
+      width: 10px;
+      height: 80px;
+      background-color: white;
+      position: absolute;
+    }
+    #left-paddle {
+      left: 10px;
+    }
+    #right-paddle {
+      right: 10px;
+    }
+    #ball {
+      width: 10px;
+      height: 10px;
+      background-color: white;
+      position: absolute;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-area">
+    <div class="paddle" id="left-paddle"></div>
+    <div class="paddle" id="right-paddle"></div>
+    <div id="ball"></div>
+  </div>
+  
+  <script>
+    const gameArea = document.getElementById("game-area");
+    const leftPaddle = document.getElementById("left-paddle");
+    const rightPaddle = document.getElementById("right-paddle");
+    const ball = document.getElementById("ball");
+    
+    let ballX = 400;
+    let ballY = 200;
+    let ballSpeedX = 5;
+    let ballSpeedY = 2;
+    
+    let leftPaddleY = 160;
+    let rightPaddleY = 160;
+    const paddleSpeed = 10;
+    
+    function updateGameArea() {
+      // Move the ball
+      ballX += ballSpeedX;
+      ballY += ballSpeedY;
+      
+      // Ball collisions with top and bottom
+      if (ballY < 0 || ballY > 390) {
+        ballSpeedY = -ballSpeedY;
+      }
+      
+      // Ball collisions with paddles
+      if (
+        (ballX < 20 && ballX > 10 && ballY > leftPaddleY && ballY < leftPaddleY + 80) ||
+        (ballX > 770 && ballX < 780 && ballY > rightPaddleY && ballY < rightPaddleY + 80)
+      ) {
+        ballSpeedX = -ballSpeedX;
+      }
+      
+      // Ball out of bounds
+      if (ballX < 0 || ballX > 800) {
+        // Reset the ball
+        ballX = 400;
+        ballY = 200;
+        ballSpeedX = 5;
+        ballSpeedY = 2;
+      }
+      
+      // Update paddles
+      if (leftPaddleY < 0) {
+        leftPaddleY = 0;
+      } else if (leftPaddleY > 320) {
+        leftPaddleY = 320;
+      }
+      
+      if (rightPaddleY < 0) {
+        rightPaddleY = 0;
+      } else if (rightPaddleY > 320) {
+        rightPaddleY = 320;
+      }
+      
+      // Clear the game area
+      gameArea.innerHTML = '';
+      
+      // Draw paddles and ball
+      leftPaddle.style.top = leftPaddleY + 'px';
+      rightPaddle.style.top = rightPaddleY + 'px';
+      ball.style.left = ballX + 'px';
+      ball.style.top = ballY + 'px';
+      
+      // Call updateGameArea function on next frame
+      requestAnimationFrame(updateGameArea);
+    }
+    
+    // Control paddles
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp') {
+        rightPaddleY -= paddleSpeed;
+      } else if (e.key === 'ArrowDown') {
+        rightPaddleY += paddleSpeed;
+      }
+      
+      if (e.key === 'w') {
+        leftPaddleY -= paddleSpeed;
+      } else if (e.key === 's') {
+        leftPaddleY += paddleSpeed;
+      }
+    });
+    
+    // Start the game loop
+    updateGameArea();
+  </script>
+</body>
+</html>
