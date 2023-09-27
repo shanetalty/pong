@@ -96,6 +96,10 @@
       gameArea.innerHTML = '';
       
       // Draw paddles and ball
+      gameArea.appendChild(leftPaddle);
+      gameArea.appendChild(rightPaddle);
+      gameArea.appendChild(ball);
+      
       leftPaddle.style.top = leftPaddleY + 'px';
       rightPaddle.style.top = rightPaddleY + 'px';
       ball.style.left = ballX + 'px';
