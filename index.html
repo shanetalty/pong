@@ -28,6 +28,13 @@
       position: absolute;
       border-radius: 50%;
     }
+    #score {
+      color: white;
+      font-size: 24px;
+      position: absolute;
+      top: 10px;
+      left: 370px;
+    }
   </style>
 </head>
 <body>
@@ -35,6 +42,7 @@
     <div class="paddle" id="left-paddle"></div>
     <div class="paddle" id="right-paddle"></div>
     <div id="ball"></div>
+    <div id="score">0 - 0</div>
   </div>
   
   <script>
@@ -42,6 +50,7 @@
     const leftPaddle = document.getElementById("left-paddle");
     const rightPaddle = document.getElementById("right-paddle");
     const ball = document.getElementById("ball");
+    const scoreDisplay = document.getElementById("score");
     
     let ballX = 400;
     let ballY = 200;
@@ -51,6 +60,9 @@
     let leftPaddleY = 160;
     let rightPaddleY = 160;
     const paddleSpeed = 10;
+    
+    let leftPlayerScore = 0;
+    let rightPlayerScore = 0;
     
     function updateGameArea() {
       // Move the ball
@@ -70,13 +82,13 @@
         ballSpeedX = -ballSpeedX;
       }
       
-      // Ball out of bounds
-      if (ballX < 0 || ballX > 800) {
-        // Reset the ball
-        ballX = 400;
-        ballY = 200;
-        ballSpeedX = 5;
-        ballSpeedY = 2;
+      // Ball out of bounds (scored)
+      if (ballX < 0) {
+        rightPlayerScore++;
+        resetBall();
+      } else if (ballX > 800) {
+        leftPlayerScore++;
+        resetBall();
       }
       
       // Update paddles
@@ -92,6 +104,9 @@
         rightPaddleY = 320;
       }
       
+      // Update the score display
+      scoreDisplay.textContent = `${leftPlayerScore} - ${rightPlayerScore}`;
+      
       // Clear the game area
       gameArea.innerHTML = '';
       
@@ -105,8 +120,15 @@
       ball.style.left = ballX + 'px';
       ball.style.top = ballY + 'px';
       
-      // Call updateGameArea function on next frame
+      // Call updateGameArea function on the next frame
       requestAnimationFrame(updateGameArea);
+    }
+    
+    function resetBall() {
+      ballX = 400;
+      ballY = 200;
+      ballSpeedX = 5;
+      ballSpeedY = 2;
     }
     
     // Control paddles
